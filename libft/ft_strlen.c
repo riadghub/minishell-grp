@@ -6,13 +6,13 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:11:04 by gekido            #+#    #+#             */
-/*   Updated: 2025/01/31 10:11:05 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/17 22:11:14 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(char *str)
+size_t	ft_strlen(const char *str)
 {
 	size_t	i;
 

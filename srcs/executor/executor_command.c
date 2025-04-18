@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/14 13:24:08 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/04/18 13:25:30 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,21 @@
 
 int	execute_ast(t_ast_node *node, t_env *env)
 {
-	int	exit_status;
-
 	if (!node)
 		return (0);
 	if (node->type == NODE_COMMAND)
-		exit_status = execute_command(node, env);
+		env->exit_code = execute_command(node, env);
 	else if (node->type == NODE_PIPE)
-		exit_status = execute_pipe(node, env);
+		env->exit_code = execute_pipe(node, env);
 	else
-		exit_status = 1;
-	return (exit_status);
+		env->exit_code = 1;
+	return (env->exit_code);
 }
 
 int	execute_builtin(char **args, t_env *env)
 {
 	if (ft_strcmp(args[0], "echo") == 0)
-		echo_builtin(args, env);
+		return (echo_builtin(args));
 	else if (ft_strcmp(args[0], "cd") == 0)
 		return (cd_builtin(args, env));
 	else if (ft_strcmp(args[0], "pwd") == 0)
@@ -68,18 +66,17 @@ int	execute_command(t_ast_node *node, t_env *env)
 {
 	int		saved_stdin;
 	int		saved_stdout;
-	int		exit_status;
 	t_redir	*redirections;
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
+	if (saved_stdin == -1 || saved_stdout == -1)
+		return (close_fd(saved_stdin, saved_stdout), 1);
 	redirections = node->redirects;
 	if (setup_redirections(redirections) != 0)
-	{
-		restore_std_fds(saved_stdin, saved_stdout);
-		return (1);
-	}
-	exit_status = execute_command_node(node, env);
+		return (restore_std_fds(saved_stdin, saved_stdout),
+			close_fd(saved_stdin, saved_stdout), 1);
+	env->exit_code = execute_command_node(node, env);
 	restore_std_fds(saved_stdin, saved_stdout);
-	return (exit_status);
+	return (close_fd(saved_stdin, saved_stdout), env->exit_code);
 }

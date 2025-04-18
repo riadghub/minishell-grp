@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:08:55 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/11 18:24:12 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/18 13:53:30 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	g_signal_status = 0;
+int		g_signal_status = 0;
 
 void	handle_command(char *input, t_env *env)
 {
@@ -34,31 +34,62 @@ void	handle_command(char *input, t_env *env)
 	}
 }
 
+int	is_posix_mode(int argc, char **argv)
+{
+	int	posix;
+	int	i;
+
+	posix = 0;
+	i = 1;
+	while (i < argc)
+	{
+		if (ft_strcmp(argv[i], "--posix") == 0)
+			posix = 1;
+		i++;
+	}
+	return (posix);
+}
+
+void	print_banner_if_needed(int posix)
+{
+	if (!posix)
+		printbanner();
+}
+
+char	*get_prompt_for(int posix)
+{
+	char	*prompt;
+
+	if (posix)
+		prompt = ft_strdup("> ");
+	else
+		prompt = ft_strdup("minishell$ ");
+	return (prompt);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char	*input;
 	t_env	*env;
+	char	*input;
+	int		cont;
+	int		exit_code;
+	char	*prompt;
 
-	(void)argc;
-	(void)argv;
 	env = init_env(envp);
 	setup_signals();
-	printbanner();
-	while (1)
+	print_banner_if_needed(is_posix_mode(argc, argv));
+	cont = 1;
+	while (cont)
 	{
-		input = readline("minishell$ ");
-		if (!input)
-		{
-			printf("exit\n");
-			break ;
-		}
-		if (input[0] == '\0')
-		{
-			free(input);
-			continue ;
-		}
-		handle_command(input, env);
-		free(input);
+		prompt = get_prompt_for(is_posix_mode(argc, argv));
+		input = readline(prompt);
+		free(prompt);
+		cont = process_input(input, env);
 	}
-	return (free_env(env), rl_clear_history(), 0);
+	exit_code = env->exit_code;
+	free_env(env);
+	rl_clear_history();
+	if (g_signal_status < 256)
+		close_fd(STDIN_FILENO, STDOUT_FILENO);
+	return (exit_code);
 }

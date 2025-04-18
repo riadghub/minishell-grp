@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 15:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/12 15:41:21 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/17 22:47:02 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,10 @@ void	expand_token_variables(t_token *tokens, t_env *env)
 		if (current->type == TOKEN_WORD)
 		{
 			expanded = expand_variables(current->value, env);
-			if (expanded)
-			{
-				free(current->value);
-				current->value = expanded;
-			}
+			if (!expanded)
+				return ;
+			free(current->value);
+			current->value = expanded;
 		}
 		current = current->next;
 	}

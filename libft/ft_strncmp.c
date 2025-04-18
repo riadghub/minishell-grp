@@ -6,13 +6,13 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:11:12 by gekido            #+#    #+#             */
-/*   Updated: 2025/01/31 10:11:13 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/17 22:13:34 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strncmp(char *s1, char *s2, size_t n)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
 

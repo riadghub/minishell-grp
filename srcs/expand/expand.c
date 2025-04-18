@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:00:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/14 14:12:05 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/04/18 13:25:40 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 char	*ft_strjoin_free(char *s1, char *s2)
 {
 	char	*result;
+
 	result = ft_strjoin(s1, s2);
 	free(s1);
 	return (result);
@@ -28,11 +29,10 @@ void	append_to_result(char **result, char c)
 	str[0] = c;
 	str[1] = '\0';
 	temp = ft_strjoin(*result, str);
-	if (temp)
-	{
-		free(*result);
-		*result = temp;
-	}
+	if (!temp)
+		return ;
+	free(*result);
+	*result = temp;
 }
 
 void	process_var_expansion(char *var_name, char **result, t_env *env)
@@ -49,27 +49,28 @@ void	process_var_expansion(char *var_name, char **result, t_env *env)
 void	handle_dollar_sign(char *str, int *i, char **result, t_env *env)
 {
 	char	*var_name;
+	char	*temp;
 
 	(*i)++;
-	if (str[*i] == '?' || ft_isdigit(str[*i]))
+	if (str[*i] == '?')
 	{
-		if (str[*i] == '?')
+		temp = ft_itoa(env->exit_code);
+		if (temp)
 		{
-			var_name = ft_itoa(g_signal_status);
-			if (var_name)
-				*result = ft_strjoin_free(*result, var_name);
-			free(var_name);
+			*result = ft_strjoin_free(*result, temp);
+			free(temp);
 		}
 		(*i)++;
 		return ;
 	}
-	if (!ft_isalpha(str[*i]) && str[*i] != '_')
+	if (ft_isdigit(str[*i]))
 	{
-		append_to_result(result, '$');
+		(*i)++;
 		return ;
 	}
-	var_name = extract_var_name(str, i);
-	if (var_name)
+	if (!ft_isalpha(str[*i]) && str[*i] != '_')
+		append_to_result(result, '$');
+	else if ((var_name = extract_var_name(str, i)))
 		process_var_expansion(var_name, result, env);
 }
 

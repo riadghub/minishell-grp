@@ -6,7 +6,7 @@
 #    By: gekido <gekido@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/04 00:13:59 by gekido            #+#    #+#              #
-#    Updated: 2025/04/12 20:41:34 by gekido           ###   ########.fr        #
+#    Updated: 2025/04/17 22:05:34 by gekido           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS	= $(SRC_DIR)/main.c \
 		$(UTILS_DIR)/env_utils.c \
 		$(UTILS_DIR)/signals.c \
 		$(UTILS_DIR)/utils.c \
+		$(UTILS_DIR)/utils2.c \
 		$(EXPAND_DIR)/expand.c \
 		$(EXPAND_DIR)/expand_utils.c \
 
@@ -69,6 +70,7 @@ fclean: clean
 re: fclean all
 
 dev: re
-	valgrind --suppressions=$(PWD)/readline.supp -s --track-fds=yes --trace-children=yes --show-leak-kinds=all --leak-check=full -q ./minishell
+	make clean
+	valgrind --suppressions=$(PWD)/readline.supp -s --track-fds=yes --trace-children=yes --show-leak-kinds=all  --track-origins=yes --leak-check=full -q ./minishell
 
 .PHONY: all clean fclean re

@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:09:58 by gekido            #+#    #+#             */
-/*   Updated: 2025/01/31 10:09:59 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/17 21:51:39 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ long	len(long nb)
 	long	len;
 
 	len = 0;
+	if (nb == 0)
+		return (1);
 	if (nb < 0)
 	{
 		nb = nb * -1;
@@ -29,26 +31,25 @@ long	len(long nb)
 	}
 	return (len);
 }
-
-char	*convert_int_to_char(char **str, long n, int i)
+char	*convert_int_to_char(char *str, long n, int i)
 {
-	*str[i--] = '\0';
+	str[i--] = '\0';
 	if (n == 0)
 	{
-		*str[0] = 48;
-		return (*str);
+		str[0] = '0';
+		return (str);
 	}
 	if (n < 0)
 	{
-		*str[0] = '-';
-		n = n * -1;
+		str[0] = '-';
+		n = -n;
 	}
 	while (n > 0)
 	{
-		*str[i--] = 48 + (n % 10);
-		n = n / 10;
+		str[i--] = '0' + (n % 10);
+		n /= 10;
 	}
-	return (*str);
+	return (str);
 }
 
 char	*ft_itoa(int nb)
@@ -62,6 +63,5 @@ char	*ft_itoa(int nb)
 	str = (char *)malloc(sizeof(char) * (i + 1));
 	if (str == NULL)
 		return (NULL);
-	convert_int_to_char(&str, n, i);
-	return (str);
+	return (convert_int_to_char(str, n, i));
 }
