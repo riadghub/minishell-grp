@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   executor_redirections.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:05:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/12 15:44:00 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/28 14:02:04 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/* File redirections */
 int	setup_redirection_in(t_redir *redir)
 {
 	int	fd;
@@ -76,31 +75,61 @@ int	setup_redirection_append(t_redir *redir)
 	return (0);
 }
 
-void	handle_heredoc(t_redir *redir)
+void	handle_heredoc(t_redir *redir, t_env *env)
 {
 	int		fd[2];
+	pid_t	pid;
+	int		status;
+	int		sig;
 	char	*line;
 
 	if (pipe(fd) == -1)
 		return ;
-	while (1)
+	pid = fork();
+	if (pid < 0)
 	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, redir->file) == 0)
-		{
-			free(line);
-			break ;
-		}
-		write(fd[1], line, ft_strlen(line));
-		write(fd[1], "\n", 1);
-		free(line);
+		close(fd[0]);
+		close(fd[1]);
+		return ;
 	}
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
+		close(fd[0]);
+		while (1)
+		{
+			line = readline("> ");
+			if (!line || ft_strcmp(line, redir->file) == 0)
+			{
+				free(line);
+				break ;
+			}
+			write(fd[1], line, ft_strlen(line));
+			write(fd[1], "\n", 1);
+			free(line);
+		}
+		close(fd[1]);
+		exit(0);
+	}
+	signal(SIGINT, SIG_IGN);
 	close(fd[1]);
+	waitpid(pid, &status, 0);
+	setup_signals();
+	sig = status & 0x7f;
+	if (sig == SIGINT)
+	{
+		env->exit_code = 130;
+		close(fd[0]);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		return ;
+	}
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
 }
 
-int	setup_redirections(t_redir *redirects)
+int	setup_redirections(t_redir *redirects, t_env *env)
 {
 	int	result;
 
@@ -114,7 +143,7 @@ int	setup_redirections(t_redir *redirects)
 		else if (redirects->type == TOKEN_APPEND)
 			result = setup_redirection_append(redirects);
 		else if (redirects->type == TOKEN_HEREDOC)
-			handle_heredoc(redirects);
+			handle_heredoc(redirects, env);
 		redirects = redirects->next;
 	}
 	return (result);

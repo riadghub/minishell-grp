@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/12 16:38:56 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/22 00:55:54 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,29 @@ void	handle_compound_operator(char *input, int *i, t_token **tokens)
 
 void	handle_operator(char *input, int *i, t_token **tokens)
 {
-	if (input[*i] == '|' || input[*i] == '<')
-		handle_simple_operator(input, i, tokens);
-	else
-		handle_compound_operator(input, i, tokens);
+	if (input[*i] == '<' && input[*i + 1] == '<')
+	{
+		add_token(tokens, create_token(TOKEN_HEREDOC, "<<"));
+		(*i) += 2;
+	}
+	else if (input[*i] == '>' && input[*i + 1] == '>')
+	{
+		add_token(tokens, create_token(TOKEN_APPEND, ">>"));
+		(*i) += 2;
+	}
+	else if (input[*i] == '|')
+	{
+		add_token(tokens, create_token(TOKEN_PIPE, "|"));
+		(*i)++;
+	}
+	else if (input[*i] == '<')
+	{
+		add_token(tokens, create_token(TOKEN_REDIR_IN, "<"));
+		(*i)++;
+	}
+	else if (input[*i] == '>')
+	{
+		add_token(tokens, create_token(TOKEN_REDIR_OUT, ">"));
+		(*i)++;
+	}
 }

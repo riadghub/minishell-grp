@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:20:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/17 22:58:33 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/22 00:58:25 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ t_env	*init_env(char **envp)
 	return (env);
 }
 
-void free_env(t_env *env)
+void	free_env(t_env *env)
 {
-	int i;
+	int	i;
 
 	if (env)
 	{

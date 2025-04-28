@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:55:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/16 22:10:44 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/20 03:37:01 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@ void	child_process(t_ast_node *node, t_env *env)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putendl_fd(node->args[0], 2);
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		close(STDERR_FILENO);
 		exit(127);
 	}
 	if (execve(path, node->args, env->vars) == -1)

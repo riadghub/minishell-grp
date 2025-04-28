@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 15:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/17 22:47:02 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/21 22:56:29 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,20 @@ char	*get_env_value(char *var, t_env *env)
 
 void	expand_token_variables(t_token *tokens, t_env *env)
 {
-	t_token	*current;
-	char	*expanded;
+	t_token	*cur;
+	char	*exp;
 
-	current = tokens;
-	while (current)
+	cur = tokens;
+	while (cur)
 	{
-		if (current->type == TOKEN_WORD)
+		exp = expand_variables(cur->value, env);
+		if (cur->type == TOKEN_WORD && exp)
 		{
-			expanded = expand_variables(current->value, env);
-			if (!expanded)
-				return ;
-			free(current->value);
-			current->value = expanded;
+			free(cur->value);
+			cur->value = exp;
 		}
-		current = current->next;
+		else
+			free(exp);
+		cur = cur->next;
 	}
 }

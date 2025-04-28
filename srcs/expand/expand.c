@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:00:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/18 13:25:40 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/04/22 01:18:02 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,14 @@ void	append_to_result(char **result, char c)
 	char	*temp;
 	char	str[2];
 
+	if (!result || c == '\0')
+		return ;
 	str[0] = c;
 	str[1] = '\0';
-	temp = ft_strjoin(*result, str);
+	if (*result)
+		temp = ft_strjoin(*result, str);
+	else
+		temp = ft_strdup(str);
 	if (!temp)
 		return ;
 	free(*result);
@@ -64,14 +69,15 @@ void	handle_dollar_sign(char *str, int *i, char **result, t_env *env)
 		return ;
 	}
 	if (ft_isdigit(str[*i]))
-	{
-		(*i)++;
-		return ;
-	}
+		return ((*i)++, (void)0);
 	if (!ft_isalpha(str[*i]) && str[*i] != '_')
 		append_to_result(result, '$');
-	else if ((var_name = extract_var_name(str, i)))
-		process_var_expansion(var_name, result, env);
+	else
+	{
+		var_name = extract_var_name(str, i);
+		if (var_name)
+			process_var_expansion(var_name, result, env);
+	}
 }
 
 char	*expand_variables(char *str, t_env *env)

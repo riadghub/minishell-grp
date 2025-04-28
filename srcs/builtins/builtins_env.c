@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:35:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/18 13:28:06 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/04/12 14:55:36 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,6 @@ int	env_builtin(t_env *env)
 	return (0);
 }
 
-void	print_export_entry(const char *entry)
-{
-	char		*eq;
-	size_t		key_len;
-	char		*key;
-	const char	*value;
-
-	eq = ft_strchr(entry, '=');
-	if (!eq)
-	{
-		printf("export %s\n", entry);
-		return ;
-	}
-	key_len = eq - entry;
-	key = ft_substr(entry, 0, key_len);
-	value = eq + 1;
-	if (value[0] == '\0')
-		printf("export %s=\"\"\n", key);
-	else
-		printf("export %s=\"%s\"\n", key, value);
-	free(key);
-}
-
 int	export_builtin(char **args, t_env *env)
 {
 	int	i;
@@ -56,12 +33,18 @@ int	export_builtin(char **args, t_env *env)
 	{
 		i = 0;
 		while (env->vars[i])
-			print_export_entry(env->vars[i++]);
+		{
+			printf("export %s\n", env->vars[i]);
+			i++;
+		}
 		return (0);
 	}
 	i = 1;
 	while (args[i])
-		add_env_var(env, args[i++]);
+	{
+		add_env_var(env, args[i]);
+		i++;
+	}
 	return (0);
 }
 
