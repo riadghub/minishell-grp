@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:39:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/29 13:24:31 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:32:59 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ typedef struct s_env
 	char			**vars;
 	unsigned char	exit_code;
 }					t_env;
+
+void				sig_handler(int sig);
 
 t_env				*init_env(char **envp);
 void				free_env(t_env *env);
