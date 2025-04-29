@@ -6,13 +6,13 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:08:55 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/28 11:45:37 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:24:08 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int		g_signal_status = 0;
+int	g_signal_status = 0;
 
 void	clean_all(t_env *env, t_token *tokens, t_ast_node *ast)
 {

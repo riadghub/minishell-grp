@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/28 11:57:48 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/04/20 04:02:13 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,16 @@ int	execute_command_node(t_ast_node *node, t_env *env)
 
 int	execute_command(t_ast_node *node, t_env *env)
 {
-	int		saved_stdin;
-	int		saved_stdout;
-	t_redir	*redirections;
+	int			saved_stdin;
+	int			saved_stdout;
+	t_redir		*redirections;
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	if (saved_stdin == -1 || saved_stdout == -1)
 		return (close_fd(saved_stdin, saved_stdout), 1);
 	redirections = node->redirects;
-	if (setup_redirections(redirections, env) != 0)
+	if (setup_redirections(redirections) != 0)
 		return (restore_std_fds(saved_stdin, saved_stdout), 1);
 	env->exit_code = execute_command_node(node, env);
 	return (restore_std_fds(saved_stdin, saved_stdout), env->exit_code);

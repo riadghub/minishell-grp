@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:39:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/28 13:50:03 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:24:31 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ void				add_env_var(t_env *env, char *var);
 void				allocate_new_env(t_env *env, char *var);
 int					find_env_var_index(char **vars, char *var, int len);
 
-int					setup_redirections(t_redir *redirects, t_env *env);
+int					setup_redirections(t_redir *redirects);
 int					setup_redirection_in(t_redir *redir);
 int					setup_redirection_out(t_redir *redir);
 int					setup_redirection_append(t_redir *redir);
-void				handle_heredoc(t_redir *redir, t_env *env);
+void				handle_heredoc(t_redir *redir);
 
 int					execute_command(t_ast_node *node, t_env *env);
 int					execute_command_node(t_ast_node *node, t_env *env);
