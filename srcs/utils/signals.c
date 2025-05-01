@@ -6,13 +6,11 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:25:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/29 14:50:01 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/01 12:34:25 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int		g_heredoc_pid = 0;
 
 void	sigint_handler(int sig)
 {
@@ -26,9 +24,21 @@ void	sigint_handler(int sig)
 
 void	sig_handler(int sig)
 {
-	if (g_heredoc_pid != 0)
+	static pid_t	child_pid = 0;
+
+	if (sig == SIGUSR1)
 	{
-		kill(g_heredoc_pid, sig);
+		child_pid = 0;
+		return ;
+	}
+	if (sig < 0)
+	{
+		child_pid = -sig;
+		return ;
+	}
+	if (child_pid != 0)
+	{
+		kill(child_pid, SIGINT);
 		write(STDOUT_FILENO, "\n", 1);
 	}
 }

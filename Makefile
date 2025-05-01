@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gekido <gekido@student.42.fr>              +#+  +:+       +#+         #
+#    By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/04 00:13:59 by gekido            #+#    #+#              #
-#    Updated: 2025/04/22 00:56:40 by gekido           ###   ########.fr        #
+#    Updated: 2025/05/01 13:42:44 by reeer-aa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ SRCS	= $(SRC_DIR)/main.c \
 		$(BUILTINS_DIR)/builtins_basic.c \
 		$(BUILTINS_DIR)/builtins_env.c \
 		$(BUILTINS_DIR)/builtins_utils.c \
+		$(BUILTINS_DIR)/builtins_export.c \
 		$(UTILS_DIR)/env_utils.c \
 		$(UTILS_DIR)/signals.c \
 		$(UTILS_DIR)/utils.c \

@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:04:08 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/29 14:45:55 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/01 12:34:30 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-extern int	g_heredoc_pid;
 extern int	g_signal_status;
 
 void		printbanner(void);

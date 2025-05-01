@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:05:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/29 14:50:38 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/01 12:42:11 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,13 @@ void	handle_heredoc(t_redir *redir)
 		close(fd[1]);
 		exit(0);
 	}
-	g_heredoc_pid = pid;
+	sig_handler(-pid);
 	close(fd[1]);
 	waitpid(pid, NULL, 0);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
+	sig_handler(SIGUSR1);
+	setup_signals();
 }
 
 int	setup_redirections(t_redir *redirects)

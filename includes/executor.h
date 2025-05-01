@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:39:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/29 14:32:59 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:21:26 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ typedef struct s_env
 	unsigned char	exit_code;
 }					t_env;
 
+int					ft_tablen(char **str);
+void				ft_print_params(int argc, char *argv[]);
 void				sig_handler(int sig);
 
 t_env				*init_env(char **envp);
