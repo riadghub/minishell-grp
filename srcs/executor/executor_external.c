@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_external.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:55:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/20 03:37:01 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/02 11:03:08 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**convert_env_to_array(t_env *env)
 void	child_process(t_ast_node *node, t_env *env)
 {
 	char	*path;
-
+	
 	path = find_path(node->args[0], env->vars);
 	if (!path)
 	{
@@ -72,6 +72,7 @@ void	execute_external(t_ast_node *node, t_env *env)
 {
 	pid_t	pid;
 
+	signal(SIGINT, sigint_handler_no_print);
 	pid = fork();
 	if (pid == -1)
 	{
@@ -82,4 +83,5 @@ void	execute_external(t_ast_node *node, t_env *env)
 		child_process(node, env);
 	else
 		parent_process(pid, env);
+	setup_signals();
 }
