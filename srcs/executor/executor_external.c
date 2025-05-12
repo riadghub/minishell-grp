@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:55:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/02 11:03:08 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:55:03 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**convert_env_to_array(t_env *env)
 void	child_process(t_ast_node *node, t_env *env)
 {
 	char	*path;
-	
+
 	path = find_path(node->args[0], env->vars);
 	if (!path)
 	{

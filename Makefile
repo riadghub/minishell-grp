@@ -6,7 +6,7 @@
 #    By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/04 00:13:59 by gekido            #+#    #+#              #
-#    Updated: 2025/05/01 13:42:44 by reeer-aa         ###   ########.fr        #
+#    Updated: 2025/05/12 14:54:10 by reeer-aa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ SRCS	= $(SRC_DIR)/main.c \
 		$(PARSER_DIR)/parser_utils.c \
 		$(PARSER_DIR)/parser_ast.c \
 		$(EXECUTOR_DIR)/executor_command.c \
+		$(EXECUTOR_DIR)/executor_heredoc.c \
 		$(EXECUTOR_DIR)/executor_external.c \
 		$(EXECUTOR_DIR)/executor_path.c \
 		$(EXECUTOR_DIR)/executor_redirections.c \
