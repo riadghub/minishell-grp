@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:53:41 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/05/12 14:54:28 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:15:43 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	handle_heredoc(t_redir *redir)
 	close(fd[1]);
 	waitpid(pid, &status, 0);
 	sig_handler(SIGUSR1);
+	setup_signals();
 	if ((status & 0x7f) == SIGINT)
 		return (1);
 	dup2(fd[0], STDIN_FILENO);
