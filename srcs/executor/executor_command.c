@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/02 10:56:55 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/18 22:51:58 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,16 @@ int	execute_command_node(t_ast_node *node, t_env *env)
 	args = node->args;
 	if (!args || !args[0])
 		return (0);
+	if (ft_strcmp(args[0], ".") == 0)
+	{
+		ft_putendl_fd(".: filename argument required", 2);
+		return (ft_putendl_fd(".: usage: . filename [arguments]", 2), 2);
+	}
+	if (args[0][0] == '.' && args[0][1] == '.')
+	{
+		ft_putstr_fd("minishell: command not found: ", 2);
+		return (ft_putendl_fd(args[0], 2), 127);
+	}
 	if (is_builtin(args[0]))
 		exit_status = execute_builtin(args, env);
 	else
