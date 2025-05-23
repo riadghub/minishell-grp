@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 18:15:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/21 12:43:32 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/23 10:18:06 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,23 @@ int	execute_pipe(t_ast_node *node, t_env *env)
 	if (pid == -1)
 		return (1);
 	if (pid == 0)
-	{
 		execute_pipe_child(node, env, pipefd);
-		exit(1);
-	}
-	else
-	{
-		exit_status = execute_pipe_parent(node, env, pipefd, pid);
-		return (exit_status);
-	}
+	exit_status = execute_pipe_parent(node, env, pipefd, pid);
+	return (exit_status);
 }
 
 void	execute_pipe_child(t_ast_node *node, t_env *env, int *pipefd)
 {
+	int	exit_code;
+
 	close(pipefd[0]);
 	dup2(pipefd[1], STDOUT_FILENO);
 	close(pipefd[1]);
 	execute_ast(node->left, env);
-	exit(0);
+	free_ast(node);
+	exit_code = env->exit_code;
+	free_env(env);
+	exit(exit_code);
 }
 
 int	execute_pipe_parent(t_ast_node *node, t_env *env, int *pipefd, pid_t pid)

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+         #
+#    By: gekido <gekido@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/04 00:13:59 by gekido            #+#    #+#              #
-#    Updated: 2025/05/12 14:54:10 by reeer-aa         ###   ########.fr        #
+#    Updated: 2025/05/21 15:38:41 by gekido           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,6 +74,6 @@ re: fclean all
 dev: re
 	make clean
 	clear
-	valgrind --suppressions=$(PWD)/readline.supp -s --track-fds=yes --trace-children=yes --show-leak-kinds=all  --track-origins=yes --leak-check=full -q ./minishell
+	valgrind --suppressions=readline.supp -s --track-fds=yes --trace-children=yes --show-leak-kinds=all  --track-origins=yes --leak-check=full -q ./minishell
 
 .PHONY: all clean fclean re

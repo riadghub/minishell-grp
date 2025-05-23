@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:20:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/22 00:58:25 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/21 14:54:51 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,14 @@ void	free_env(t_env *env)
 {
 	int	i;
 
-	if (env)
+	if (!env)
+		return ;
+	if (env->vars)
 	{
-		if (env->vars)
-		{
-			i = 0;
-			while (env->vars[i])
-			{
-				free(env->vars[i]);
-				i++;
-			}
-			free(env->vars);
-		}
-		free(env);
+		i = 0;
+		while (env->vars[i])
+			free(env->vars[i++]);
+		free(env->vars);
 	}
+	free(env);
 }

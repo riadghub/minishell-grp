@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/12 16:26:41 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/21 14:54:36 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,7 @@ void	free_args(char **args)
 		return ;
 	i = 0;
 	while (args[i])
-	{
-		free(args[i]);
-		i++;
-	}
+		free(args[i++]);
 	free(args);
 }
 

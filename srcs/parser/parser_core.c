@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:10:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/21 23:45:37 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/22 01:24:50 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,21 @@
 int	is_pipe_token(t_token *token)
 {
 	return (token && token->type == TOKEN_PIPE);
+}
+
+void	free_ast(t_ast_node *node)
+{
+	if (!node)
+		return ;
+	if (node->left)
+		free_ast(node->left);
+	if (node->right)
+		free_ast(node->right);
+	if (node->args)
+		free_args(node->args);
+	if (node->redirects)
+		free_redirections(node->redirects);
+	free(node);
 }
 
 void	skip_to_next_token(t_token **token, int count)
@@ -27,33 +42,6 @@ void	skip_to_next_token(t_token **token, int count)
 		*token = (*token)->next;
 		i++;
 	}
-}
-
-t_ast_node	*parser(t_token *tokens)
-{
-	t_ast_node	*left;
-	t_ast_node	*right;
-	t_token		*current;
-	t_ast_node	*pipe_node;
-
-	if (!tokens)
-		return (NULL);
-	current = tokens;
-	left = parse_command(&current);
-	if (!left)
-		return (NULL);
-	if (is_pipe_token(current))
-	{
-		skip_to_next_token(&current, 1);
-		right = parser(current);
-		if (!right)
-			return (free_ast(left), NULL);
-		pipe_node = create_pipe_node(left, right);
-		if (!pipe_node)
-			return (free_ast(left), free_ast(right), NULL);
-		return (pipe_node);
-	}
-	return (left);
 }
 
 t_ast_node	*parse_command(t_token **token)
@@ -72,13 +60,26 @@ t_ast_node	*parse_command(t_token **token)
 	return (create_command_node(args, redirects));
 }
 
-void	free_ast(t_ast_node *node)
+t_ast_node	*parser(t_token *tokens)
 {
-	if (!node)
-		return ;
-	free_ast(node->left);
-	free_ast(node->right);
-	free_args(node->args);
-	free_redirections(node->redirects);
-	free(node);
+	t_ast_node	*left;
+	t_ast_node	*right;
+
+	if (!tokens)
+		return (NULL);
+	left = parse_command(&tokens);
+	if (!left)
+		return (NULL);
+	if (is_pipe_token(tokens))
+	{
+		skip_to_next_token(&tokens, 1);
+		right = parser(tokens);
+		if (!right)
+		{
+			free_ast(left);
+			return (NULL);
+		}
+		return (create_pipe_node(left, right));
+	}
+	return (left);
 }

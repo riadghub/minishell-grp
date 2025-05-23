@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:39:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/12 12:25:06 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/22 01:33:24 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,8 @@ typedef struct s_env
 int					ft_tablen(char **str);
 void				ft_print_params(int argc, char *argv[]);
 void				sig_handler(int sig);
-
 t_env				*init_env(char **envp);
 void				free_env(t_env *env);
-char				*get_env_value(char *var, t_env *env);
 void				update_env_var(t_env *env, char *key, char *value);
 void				add_env_var(t_env *env, char *var);
 void				allocate_new_env(t_env *env, char *var);
@@ -70,7 +68,6 @@ char				*search_in_paths(char *cmd, char **paths);
 char				**convert_env_to_array(t_env *env);
 void				free_array(char **arr);
 
-char				*expand_variables(char *str, t_env *env);
 void				expand_token_variables(t_token *tokens, t_env *env);
 
 int					is_builtin(char *cmd);

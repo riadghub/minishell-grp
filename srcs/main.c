@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:08:55 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/02 10:53:10 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/23 10:38:36 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,19 @@ void	handle_command(char *input, t_env *env)
 	if (!tokens)
 		return ;
 	if (tokens->type == TOKEN_WORD && !is_builtin(tokens->value))
+	{
 		if (is_unknown_cmd(tokens, env))
+		{
+			free_tokens(tokens);
 			return ;
+		}
+	}
 	expand_token_variables(tokens, env);
 	ast = parser(tokens);
-	if (ast)
-	{
-		execute_ast(ast, env);
-		free_ast(ast);
-	}
 	free_tokens(tokens);
+	if (ast)
+		execute_ast(ast, env);
+	free_ast(ast);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -57,7 +60,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	env = init_env(envp);
 	setup_signals();
-	printbanner();
+	// printbanner();
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -70,5 +73,6 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 	}
 	exit_code = env->exit_code;
-	return (clean_all(env, NULL, NULL), exit_code);
+	clean_all(env, NULL, NULL);
+	return (exit_code);
 }

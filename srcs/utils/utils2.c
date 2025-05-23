@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:15:10 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/22 00:58:40 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/22 02:16:57 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	is_unknown_cmd(t_token *tokens, t_env *env)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putendl_fd(tokens->value, 2);
-		free_tokens(tokens);
 		return (1);
 	}
 	free(path);

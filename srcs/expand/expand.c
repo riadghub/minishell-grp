@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/11 17:00:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/22 01:18:02 by gekido           ###   ########.fr       */
+/*   Created: 2025/05/22 01:39:15 by gekido            #+#    #+#             */
+/*   Updated: 2025/05/23 12:01:22 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 
 void	append_to_result(char **result, char c)
 {
-	char	*temp;
+	char	*tmp;
 	char	str[2];
 
 	if (!result || c == '\0')
@@ -31,13 +31,13 @@ void	append_to_result(char **result, char c)
 	str[0] = c;
 	str[1] = '\0';
 	if (*result)
-		temp = ft_strjoin(*result, str);
+		tmp = ft_strjoin(*result, str);
 	else
-		temp = ft_strdup(str);
-	if (!temp)
+		tmp = ft_strdup(str);
+	if (!tmp)
 		return ;
 	free(*result);
-	*result = temp;
+	*result = tmp;
 }
 
 void	process_var_expansion(char *var_name, char **result, t_env *env)
@@ -69,7 +69,10 @@ void	handle_dollar_sign(char *str, int *i, char **result, t_env *env)
 		return ;
 	}
 	if (ft_isdigit(str[*i]))
-		return ((*i)++, (void)0);
+	{
+		(*i)++;
+		return ;
+	}
 	if (!ft_isalpha(str[*i]) && str[*i] != '_')
 		append_to_result(result, '$');
 	else
@@ -83,15 +86,21 @@ void	handle_dollar_sign(char *str, int *i, char **result, t_env *env)
 char	*expand_variables(char *str, t_env *env)
 {
 	char	*result;
+	char	quote;
 	int		i;
+	bool	in_single_quotes;
 
 	result = ft_strdup("");
+	quote = 0;
 	if (!result)
 		return (NULL);
 	i = 0;
+	in_single_quotes = false;
 	while (str[i])
 	{
-		if (str[i] == '$')
+		if (str[i] == '\'' && quote != '"')
+			in_single_quotes = !in_single_quotes;
+		if (str[i] == '$' && in_single_quotes)
 			handle_dollar_sign(str, &i, &result, env);
 		else
 			append_to_result(&result, str[i++]);
