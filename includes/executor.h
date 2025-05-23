@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:39:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/22 01:33:24 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/23 12:46:09 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int					pwd_builtin(void);
 int					export_builtin(char **args, t_env *env);
 int					unset_builtin(char **args, t_env *env);
 int					env_builtin(t_env *env);
-int					exit_builtin(char **args);
+int					exit_builtin(char **args, t_env *env);
 
 void				execute_external(t_ast_node *node, t_env *env);
 void				child_process(t_ast_node *node, t_env *env);

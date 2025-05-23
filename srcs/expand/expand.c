@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 01:39:15 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/23 12:01:22 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/23 14:44:21 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	*expand_variables(char *str, t_env *env)
 	{
 		if (str[i] == '\'' && quote != '"')
 			in_single_quotes = !in_single_quotes;
-		if (str[i] == '$' && in_single_quotes)
+		if (str[i] == '$' && !in_single_quotes)
 			handle_dollar_sign(str, &i, &result, env);
 		else
 			append_to_result(&result, str[i++]);

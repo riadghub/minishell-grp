@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:35:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/18 22:51:12 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/23 12:27:21 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,22 @@ static int	key_len(const char *s)
 	return (i);
 }
 
+bool	is_valid_env_var_name(char *var)
+{
+	int	i;
+
+	if (!var || (!ft_isalpha(var[0]) && var[0] != '_'))
+		return (false);
+	i = 1;
+	while (var[i] && var[i] != '=')
+	{
+		if (!ft_isalnum(var[i]) && var[i] != '_')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 void	add_env_var(t_env *env, char *var)
 {
 	int		i;
@@ -91,6 +107,15 @@ void	add_env_var(t_env *env, char *var)
 
 	klen = key_len(var);
 	new = ft_strdup(var);
+	if (!is_valid_env_var_name(var))
+	{
+		ft_putstr_fd("minishell: export: `", 2);
+		ft_putstr_fd(var, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
+		env->exit_code = 1;
+		free(new);
+		return ;
+	}
 	i = 0;
 	while (env->vars[i])
 	{

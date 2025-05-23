@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:08:55 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/23 10:38:36 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/23 14:37:45 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	exit_code = 0;
 	env = init_env(envp);
 	setup_signals();
 	// printbanner();

@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/23 11:16:01 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/23 12:46:11 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,13 @@ int	execute_builtin(char **args, t_env *env)
 	else if (ft_strcmp(args[0], "env") == 0)
 		return (env_builtin(env));
 	else if (ft_strcmp(args[0], "exit") == 0)
-		return (exit_builtin(args));
+		return (exit_builtin(args, env));
 	return (1);
 }
 
 int	execute_command_node(t_ast_node *node, t_env *env)
 {
 	char	**args;
-	int		exit_status;
 
 	args = node->args;
 	if (!args || !args[0])
@@ -63,20 +62,17 @@ int	execute_command_node(t_ast_node *node, t_env *env)
 		return (ft_putendl_fd(args[0], 2), 127);
 	}
 	if (is_builtin(args[0]))
-		exit_status = execute_builtin(args, env);
+		env->exit_code = execute_builtin(args, env);
 	else
-	{
 		execute_external(node, env);
-		exit_status = env->exit_code;
-	}
-	return (exit_status);
+	return (env->exit_code);
 }
 
 int	execute_command(t_ast_node *node, t_env *env)
 {
-	int			saved_stdin;
-	int			saved_stdout;
-	t_redir		*redirections;
+	int		saved_stdin;
+	int		saved_stdout;
+	t_redir	*redirections;
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);

@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/23 11:23:50 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/23 14:32:14 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,8 @@ int	is_numeric(const char *str)
 	return (1);
 }
 
-int	exit_builtin(char **args)
+int	exit_builtin(char **args, t_env *env)
 {
-	long	code;
-
 	ft_putendl_fd("exit", 1);
 	if (!args[1])
 	{
@@ -96,14 +94,19 @@ int	exit_builtin(char **args)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
-		g_signal_status = 256;
-		return (255);
+		g_signal_status = 256 + 2;
+		env->exit_code = g_signal_status;
+		return (env->exit_code);
 	}
 	if (args[2])
 		return (ft_putendl_fd("minishell: exit: too many arguments", 2), 1);
-	code = ft_atoi(args[1]) % 256;
-	g_signal_status = 256;
-	return ((int)code);
+	env->exit_code = ft_atoi(args[1]);
+	if (env->exit_code < 0)
+		env->exit_code = 256 + (env->exit_code % 256);
+	else
+		env->exit_code = env->exit_code % 256;
+	g_signal_status = 256 + env->exit_code;
+	return (env->exit_code);
 }
 
 int	pwd_builtin(void)
