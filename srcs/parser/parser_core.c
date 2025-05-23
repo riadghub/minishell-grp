@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_core.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:10:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/22 01:24:50 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/23 14:52:38 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,16 @@ t_ast_node	*parse_command(t_token **token)
 	int		word_count;
 	char	**args;
 	t_redir	*redirects;
+	t_token	*temp_token;
 
 	word_count = count_word_tokens(*token);
 	if (word_count == 0 && !is_redirection((*token)->type))
 		return (NULL);
+	temp_token = *token;
 	args = extract_args(token, word_count);
 	if (!args && word_count > 0)
 		return (NULL);
+	*token = temp_token;
 	redirects = parse_redirections(token);
 	return (create_command_node(args, redirects));
 }
