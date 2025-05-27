@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 01:39:02 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/22 01:39:03 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/27 14:18:17 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,13 @@ char	*get_env_value(char *var, t_env *env)
 	int	i;
 	int	len;
 
-	/* on caste var pour ft_strcmp, qui prend char * */
 	if (ft_strcmp((char *)var, "?") == 0)
 		return (ft_itoa(env->exit_code));
 	len = ft_strlen(var);
 	i = 0;
 	while (env->vars[i])
 	{
-		if (ft_strncmp(env->vars[i], var, len) == 0
-			&& env->vars[i][len] == '=')
+		if (ft_strncmp(env->vars[i], var, len) == 0 && env->vars[i][len] == '=')
 			return (ft_strdup(env->vars[i] + len + 1));
 		i++;
 	}
@@ -47,19 +45,26 @@ char	*get_env_value(char *var, t_env *env)
 void	expand_token_variables(t_token *tokens, t_env *env)
 {
 	t_token	*cur;
-	char	*exp;
+	char	*expanded;
+	char	*final;
 
 	cur = tokens;
 	while (cur)
 	{
-		exp = expand_variables(cur->value, env);
-		if (cur->type == TOKEN_WORD && exp)
+		if (cur->type == TOKEN_WORD)
 		{
-			free(cur->value);
-			cur->value = exp;
+			expanded = expand_variables(cur->value, env);
+			if (expanded)
+			{
+				final = remove_quotes(expanded);
+				if (final)
+				{
+					free(cur->value);
+					cur->value = final;
+				}
+				free(expanded);
+			}
 		}
-		else
-			free(exp);
 		cur = cur->next;
 	}
 }

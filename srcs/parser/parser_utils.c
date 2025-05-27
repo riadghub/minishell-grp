@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:13:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/23 14:52:46 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/27 13:09:01 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ char	**extract_args(t_token **token, int count)
 	char	**args;
 	int		i;
 	t_token	*current;
+	t_token	*prev;
 
 	args = malloc(sizeof(char *) * (count + 1));
 	if (!args)
@@ -48,6 +49,17 @@ char	**extract_args(t_token **token, int count)
 	{
 		if (current->type == TOKEN_WORD)
 		{
+			if (current != *token)
+			{
+				prev = *token;
+				while (prev->next != current)
+					prev = prev->next;
+				if (is_redirection(prev->type))
+				{
+					current = current->next;
+					continue ;
+				}
+			}
 			args[i] = ft_strdup(current->value);
 			if (!args[i])
 			{
@@ -57,13 +69,6 @@ char	**extract_args(t_token **token, int count)
 				return (NULL);
 			}
 			i++;
-		}
-		else if (is_redirection(current->type))
-		{
-			current = current->next;
-			if (current && current->type == TOKEN_WORD)
-				current = current->next;
-			continue ;
 		}
 		current = current->next;
 	}

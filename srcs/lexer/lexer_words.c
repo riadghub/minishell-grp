@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_words.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:05:54 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/12 16:53:44 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/27 14:20:31 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,16 @@ void	extract_quoted_text(char *input, int *i, char **word, char quote)
 	int		start;
 	char	*substr;
 	char	*tmp;
+	char	quote_str[2];
 
+	quote_str[0] = quote;
+	quote_str[1] = '\0';
+	tmp = ft_strjoin(*word, quote_str);
+	if (tmp)
+	{
+		free(*word);
+		*word = tmp;
+	}
 	(*i)++;
 	start = *i;
 	while (input[*i] && input[*i] != quote)
@@ -59,7 +68,15 @@ void	extract_quoted_text(char *input, int *i, char **word, char quote)
 		}
 	}
 	if (input[*i] == quote)
+	{
+		tmp = ft_strjoin(*word, quote_str);
+		if (tmp)
+		{
+			free(*word);
+			*word = tmp;
+		}
 		(*i)++;
+	}
 }
 
 void	handle_quotes(char *input, int *i, char **word)
