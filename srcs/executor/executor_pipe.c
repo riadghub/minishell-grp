@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 18:15:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/23 14:41:08 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/03 11:31:31 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,32 +30,11 @@ int	execute_pipe(t_ast_node *node, t_env *env)
 
 void	execute_pipe_child(t_ast_node *node, t_env *env, int *pipefd)
 {
-	int		exit_code;
-	t_redir	*redir;
-	int		has_output_redir;
+	int	exit_code;
 
 	close(pipefd[0]);
-	
-	// Check if the left command has output redirections
-	has_output_redir = 0;
-	redir = node->left->redirects;
-	while (redir)
-	{
-		if (redir->type == TOKEN_REDIR_OUT || redir->type == TOKEN_APPEND)
-		{
-			has_output_redir = 1;
-			break;
-		}
-		redir = redir->next;
-	}
-	
-	// If no output redirection, redirect to pipe
-	if (!has_output_redir)
-	{
-		dup2(pipefd[1], STDOUT_FILENO);
-	}
+	dup2(pipefd[1], STDOUT_FILENO);
 	close(pipefd[1]);
-	
 	execute_ast(node->left, env);
 	free_ast(node);
 	exit_code = g_signal_status;
