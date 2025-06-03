@@ -24,20 +24,41 @@ int	execute_pipe(t_ast_node *node, t_env *env)
 		return (1);
 	if (pid == 0)
 		execute_pipe_child(node, env, pipefd);
-	env->exit_code = execute_pipe_parent(node, env, pipefd, pid);
-	return (env->exit_code);
+	g_signal_status = execute_pipe_parent(node, env, pipefd, pid);
+	return (g_signal_status);
 }
 
 void	execute_pipe_child(t_ast_node *node, t_env *env, int *pipefd)
 {
-	int	exit_code;
+	int		exit_code;
+	t_redir	*redir;
+	int		has_output_redir;
 
 	close(pipefd[0]);
-	dup2(pipefd[1], STDOUT_FILENO);
+	
+	// Check if the left command has output redirections
+	has_output_redir = 0;
+	redir = node->left->redirects;
+	while (redir)
+	{
+		if (redir->type == TOKEN_REDIR_OUT || redir->type == TOKEN_APPEND)
+		{
+			has_output_redir = 1;
+			break;
+		}
+		redir = redir->next;
+	}
+	
+	// If no output redirection, redirect to pipe
+	if (!has_output_redir)
+	{
+		dup2(pipefd[1], STDOUT_FILENO);
+	}
 	close(pipefd[1]);
+	
 	execute_ast(node->left, env);
 	free_ast(node);
-	exit_code = env->exit_code;
+	exit_code = g_signal_status;
 	free_env(env);
 	exit(exit_code);
 }

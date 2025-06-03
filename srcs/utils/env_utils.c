@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:20:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/23 14:38:00 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/03 01:40:25 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ t_env	*init_env(char **envp)
 		i++;
 	}
 	env->vars[count] = NULL;
-	env->exit_code = 0;
 	return (env);
 }
 

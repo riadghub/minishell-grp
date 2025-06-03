@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 13:41:22 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/05/23 12:23:00 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/03 01:40:25 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,5 @@ int	export_builtin(char **args, t_env *env)
 		add_env_var(env, args[i]);
 		i++;
 	}
-	return (env->exit_code);
+	return (g_signal_status % 256);
 }

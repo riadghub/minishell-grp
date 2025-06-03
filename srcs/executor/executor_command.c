@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/23 12:46:11 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/03 01:40:25 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ int	execute_ast(t_ast_node *node, t_env *env)
 	if (!node)
 		return (0);
 	if (node->type == NODE_COMMAND)
-		env->exit_code = execute_command(node, env);
+		g_signal_status = execute_command(node, env);
 	else if (node->type == NODE_PIPE)
-		env->exit_code = execute_pipe(node, env);
+		g_signal_status = execute_pipe(node, env);
 	else
-		env->exit_code = 1;
-	return (env->exit_code);
+		g_signal_status = 1;
+	return (g_signal_status % 256);
 }
 
 int	execute_builtin(char **args, t_env *env)
@@ -62,10 +62,10 @@ int	execute_command_node(t_ast_node *node, t_env *env)
 		return (ft_putendl_fd(args[0], 2), 127);
 	}
 	if (is_builtin(args[0]))
-		env->exit_code = execute_builtin(args, env);
+		g_signal_status = execute_builtin(args, env);
 	else
 		execute_external(node, env);
-	return (env->exit_code);
+	return (g_signal_status % 256);
 }
 
 int	execute_command(t_ast_node *node, t_env *env)
@@ -81,6 +81,6 @@ int	execute_command(t_ast_node *node, t_env *env)
 	redirections = node->redirects;
 	if (setup_redirections(redirections) != 0)
 		return (restore_std_fds(saved_stdin, saved_stdout), 1);
-	env->exit_code = execute_command_node(node, env);
-	return (restore_std_fds(saved_stdin, saved_stdout), env->exit_code);
+	g_signal_status = execute_command_node(node, env);
+	return (restore_std_fds(saved_stdin, saved_stdout), g_signal_status % 256);
 }

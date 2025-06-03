@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_external.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:55:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/12 14:55:03 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/03 01:40:25 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,12 @@ void	parent_process(pid_t pid, t_env *env)
 {
 	int	status;
 
+	(void)env;
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
-		env->exit_code = WEXITSTATUS(status);
+		g_signal_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		env->exit_code = 128 + WTERMSIG(status);
+		g_signal_status = 128 + WTERMSIG(status);
 }
 
 void	execute_external(t_ast_node *node, t_env *env)

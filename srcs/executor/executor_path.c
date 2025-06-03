@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 16:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/16 22:44:47 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/03 01:40:25 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ char	*search_in_paths(char *cmd, char **paths)
 		i++;
 	}
 	free_array(paths);
-	if (access(cmd, X_OK) == 0)
-		return (ft_strdup(cmd));
 	return (NULL);
 }
 

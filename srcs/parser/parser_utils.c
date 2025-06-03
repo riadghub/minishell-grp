@@ -19,7 +19,7 @@ int	count_word_tokens(t_token *token)
 	count = 0;
 	while (token && token->type != TOKEN_PIPE)
 	{
-		if (token->type == TOKEN_WORD)
+		if (token->type == TOKEN_WORD && token->value && ft_strlen(token->value) > 0)
 			count++;
 		else if (is_redirection(token->type))
 		{
@@ -45,20 +45,25 @@ char	**extract_args(t_token **token, int count)
 		return (NULL);
 	i = 0;
 	current = *token;
+	prev = NULL;
 	while (current && current->type != TOKEN_PIPE && i < count)
 	{
 		if (current->type == TOKEN_WORD)
 		{
-			if (current != *token)
+			// Check if this word is a redirection file (preceded by redirection)
+			if (prev && is_redirection(prev->type))
 			{
-				prev = *token;
-				while (prev->next != current)
-					prev = prev->next;
-				if (is_redirection(prev->type))
-				{
-					current = current->next;
-					continue ;
-				}
+				// Skip this word as it's a redirection file, not an argument
+				prev = current;
+				current = current->next;
+				continue ;
+			}
+			// Skip empty tokens that result from variable expansion
+			if (!current->value || ft_strlen(current->value) == 0)
+			{
+				prev = current;
+				current = current->next;
+				continue ;
 			}
 			args[i] = ft_strdup(current->value);
 			if (!args[i])
@@ -70,6 +75,7 @@ char	**extract_args(t_token **token, int count)
 			}
 			i++;
 		}
+		prev = current;
 		current = current->next;
 	}
 	args[i] = NULL;
