@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:39:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/23 12:46:09 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/04 03:41:52 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,10 @@ int					setup_redirection_append(t_redir *redir);
 int					handle_heredoc(t_redir *redir);
 
 int					execute_command(t_ast_node *node, t_env *env);
-int					execute_command_node(t_ast_node *node, t_env *env);
+int					execute_command_child(t_ast_node *node, t_env *env);
 int					execute_builtin(char **args, t_env *env);
 int					execute_ast(t_ast_node *node, t_env *env);
+int					execute_ast_child(t_ast_node *node, t_env *env);
 
 int					execute_pipe(t_ast_node *node, t_env *env);
 void				execute_pipe_child(t_ast_node *node, t_env *env,

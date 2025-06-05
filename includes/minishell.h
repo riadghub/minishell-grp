@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:04:08 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/03 10:28:18 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:02:39 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,28 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <sys/stat.h>
 # include <sys/wait.h>
 # include <unistd.h>
 
-extern int	g_signal_status;
+extern int			g_signal_status;
+extern t_env		*g_env_cleanup;
+extern t_ast_node	*g_ast_cleanup;
 
-void		sigint_handler_no_print(int sig);
-void		printbanner(void);
-int			handle_input(char *input, char **envp);
-void		restore_std_fds(int saved_stdin, int saved_stdout);
-int			should_exit(void);
-int			get_exit_code(void);
-int			process_input(char *input, t_env *env);
-void		handle_command(char *input, t_env *env);
-void		close_fd(int fd1, int fd2);
-void		clean_all(t_env *env, t_token *tokens, t_ast_node *ast);
-int			is_unknown_cmd(t_token *tokens, t_env *env);
+void				cleanup_on_exit(void);
+void				cleanup_child_process(void);
+
+void				sigint_handler_no_print(int sig);
+void				printbanner(void);
+int					handle_input(char *input, char **envp);
+void				restore_std_fds(int saved_stdin, int saved_stdout);
+int					should_exit(void);
+int					get_exit_code(void);
+int					process_input(char *input, t_env *env);
+void				handle_command(char *input, t_env *env);
+void				close_fd(int fd1, int fd2);
+void				clean_all(t_env *env, t_token *tokens, t_ast_node *ast);
+int					is_unknown_cmd(t_token *tokens, t_env *env);
+void				cleanup_on_exit(void);
+void				cleanup_child_process(void);
 
 #endif

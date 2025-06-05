@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/03 01:40:25 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/04 22:49:57 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	cd_builtin(char **args, t_env *env)
 {
 	char	cwd[1024];
 	char	*path;
+	int		should_free;
 
 	if (ft_tablen(args) > 2)
 		return (ft_putendl_fd("minishell: too many arguments", 2), 1);
@@ -24,20 +25,26 @@ int	cd_builtin(char **args, t_env *env)
 		path = get_env_value("HOME", env);
 		if (!path)
 			return (ft_putendl_fd("minishell: cd: HOME not set", 2), 1);
+		should_free = 0;
 	}
 	else
+	{
 		path = ft_strdup(args[1]);
+		should_free = 1;
+	}
 	if (chdir(path))
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
 		ft_putstr_fd(path, 2);
 		ft_putendl_fd(": No such file or directory", 2);
-		free(path);
+		if (should_free)
+			free(path);
 		return (1);
 	}
 	if (getcwd(cwd, 1024))
 		update_env_var(env, "PWD", cwd);
-	free(path);
+	if (should_free)
+		free(path);
 	return (0);
 }
 
@@ -55,13 +62,13 @@ int	echo_builtin(char **args)
 	}
 	while (args[i])
 	{
-		printf("%s", args[i]);
+		write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
 		if (args[i + 1])
-			printf(" ");
+			write(STDOUT_FILENO, " ", 1);
 		i++;
 	}
 	if (!n)
-		printf("\n");
+		write(STDOUT_FILENO, "\n", 1);
 	return (0);
 }
 

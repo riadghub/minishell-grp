@@ -6,7 +6,7 @@
 #    By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/04 00:13:59 by gekido            #+#    #+#              #
-#    Updated: 2025/05/27 14:06:30 by reeer-aa         ###   ########.fr        #
+#    Updated: 2025/06/05 10:02:00 by reeer-aa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,7 @@ SRCS	= $(SRC_DIR)/main.c \
 		$(UTILS_DIR)/signals.c \
 		$(UTILS_DIR)/utils.c \
 		$(UTILS_DIR)/utils2.c \
+		$(UTILS_DIR)/cleanup.c \
 		$(EXPAND_DIR)/expand.c \
 		$(EXPAND_DIR)/expand_utils.c \
 		$(EXPAND_DIR)/quote_removal.c \

@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:53:41 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/05/12 15:21:18 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:00:24 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static int	heredoc_child_process(int *fd, t_redir *redir)
 		line = readline("> ");
 		if (!line || ft_strcmp(line, redir->file) == 0)
 		{
-			free(line);
+			if (line)
+				free(line);
 			break ;
 		}
 		write(fd[1], line, ft_strlen(line));
@@ -32,7 +33,8 @@ static int	heredoc_child_process(int *fd, t_redir *redir)
 		free(line);
 	}
 	close(fd[1]);
-	exit(0);
+	cleanup_child_process();
+	_exit(0);
 }
 
 int	handle_heredoc(t_redir *redir)
@@ -59,7 +61,11 @@ int	handle_heredoc(t_redir *redir)
 	sig_handler(SIGUSR1);
 	setup_signals();
 	if ((status & 0x7f) == SIGINT)
+	{
+		close(fd[0]);
 		return (1);
+	}
 	dup2(fd[0], STDIN_FILENO);
-	return (close(fd[0]), 0);
+	close(fd[0]);
+	return (0);
 }
