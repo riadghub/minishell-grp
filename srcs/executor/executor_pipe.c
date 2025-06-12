@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 18:15:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/05 02:19:04 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/12 10:04:48 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,31 +30,22 @@ int	execute_pipe(t_ast_node *node, t_env *env)
 
 void	execute_pipe_child(t_ast_node *node, t_env *env, int *pipefd)
 {
-	int		exit_code;
+	int	exit_code;
 
 	close(pipefd[0]);
-	
-	// Always redirect stdout to pipe initially
-	// If there are output redirections, setup_redirections() will override this
 	dup2(pipefd[1], STDOUT_FILENO);
 	close(pipefd[1]);
-	
 	execute_ast_child(node->left, env);
 	exit_code = g_signal_status;
-	
-	// Clean up properly in child process before exiting
-	cleanup_child_process();
-	
-	// Use _exit() to avoid calling atexit handlers and cleanup routines
-	// This prevents "still reachable" memory in child processes
+	cleanup_child_process(env);
 	_exit(exit_code);
 }
 
 int	execute_pipe_parent(t_ast_node *node, t_env *env, int *pipefd, pid_t pid)
 {
-	int	status;
+	int		status;
 	pid_t	right_pid;
-	int	right_status;
+	int		right_status;
 
 	close(pipefd[1]);
 	right_pid = fork();
@@ -65,13 +56,8 @@ int	execute_pipe_parent(t_ast_node *node, t_env *env, int *pipefd, pid_t pid)
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
 		execute_ast_child(node->right, env);
-		
-		// Clean up properly in child process before exiting
-		cleanup_child_process();
-		
-		// Use _exit() to avoid calling atexit handlers and cleanup routines
-		// This prevents "still reachable" memory in child processes
-		_exit(g_signal_status);
+		cleanup_child_process(env);
+		exit(g_signal_status);
 	}
 	close(pipefd[0]);
 	waitpid(pid, &status, 0);

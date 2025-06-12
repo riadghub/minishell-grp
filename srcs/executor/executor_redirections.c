@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:05:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/27 12:59:17 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/12 10:03:21 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	setup_redirection_append(t_redir *redir)
 	return (0);
 }
 
-int	setup_redirections(t_redir *redirects)
+int	setup_redirections(t_redir *redirects, t_env *env)
 {
 	int	result;
 
@@ -89,7 +89,7 @@ int	setup_redirections(t_redir *redirects)
 		else if (redirects->type == TOKEN_APPEND)
 			result = setup_redirection_append(redirects);
 		else if (redirects->type == TOKEN_HEREDOC)
-			result = handle_heredoc(redirects);
+			result = handle_heredoc(redirects, env);
 		redirects = redirects->next;
 	}
 	return (result);

@@ -6,15 +6,13 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:08:55 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/11 13:40:21 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/12 10:11:09 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int			g_signal_status = 0;
-t_env		*g_env_cleanup = NULL;
-t_ast_node	*g_ast_cleanup = NULL;
+int		g_signal_status = 0;
 
 void	clean_all(t_env *env, t_token *tokens, t_ast_node *ast)
 {
@@ -26,7 +24,7 @@ void	clean_all(t_env *env, t_token *tokens, t_ast_node *ast)
 		free_env(env);
 	rl_clear_history();
 }
-	
+
 void	handle_command(char *input, t_env *env)
 {
 	t_token		*tokens;
@@ -70,8 +68,6 @@ int	main(int argc, char **argv, char **envp)
 	env = init_env(envp);
 	if (!env)
 		return (1);
-	g_env_cleanup = env;
-	atexit(cleanup_on_exit);
 	setup_signals();
 	while (1)
 	{
@@ -85,7 +81,8 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 	}
 	exit_code = get_exit_code();
-	g_env_cleanup = NULL;
-	clean_all(env, NULL, NULL);
+	cleanup_on_exit(env);
+	free_env(env);
+	rl_clear_history();
 	return (exit_code);
 }

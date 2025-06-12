@@ -6,13 +6,13 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:53:41 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/06/05 10:00:24 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/12 10:02:37 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	heredoc_child_process(int *fd, t_redir *redir)
+static int	heredoc_child_process(int *fd, t_redir *redir, t_env *env)
 {
 	char	*line;
 
@@ -33,11 +33,11 @@ static int	heredoc_child_process(int *fd, t_redir *redir)
 		free(line);
 	}
 	close(fd[1]);
-	cleanup_child_process();
+	cleanup_child_process(env);
 	_exit(0);
 }
 
-int	handle_heredoc(t_redir *redir)
+int	handle_heredoc(t_redir *redir, t_env *env)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -54,7 +54,7 @@ int	handle_heredoc(t_redir *redir)
 		return (1);
 	}
 	if (pid == 0)
-		heredoc_child_process(fd, redir);
+		heredoc_child_process(fd, redir, env);
 	sig_handler(-pid);
 	close(fd[1]);
 	waitpid(pid, &status, 0);
