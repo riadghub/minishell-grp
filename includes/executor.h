@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:39:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/12 10:03:37 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/13 10:33:43 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@ typedef struct s_env
 	unsigned char		exit_code;
 	struct s_env		*env_cleanup;
 	struct s_ast_node	*ast_cleanup;
+	int					saved_stdin;
+	int					saved_stdout;
 }						t_env;
 
 int						ft_tablen(char **str);
-void					ft_print_params(int argc, char *argv[]);
 void					sig_handler(int sig);
 t_env					*init_env(char **envp);
 void					free_env(t_env *env);

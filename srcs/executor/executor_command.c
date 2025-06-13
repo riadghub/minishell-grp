@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/12 10:04:01 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/13 10:34:32 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,24 +78,22 @@ int	execute_command_node(t_ast_node *node, t_env *env)
 
 int	execute_command(t_ast_node *node, t_env *env)
 {
-	int		saved_stdin;
-	int		saved_stdout;
 	t_redir	*redirections;
 	int		result;
 
 	if (!node->redirects)
 		return (execute_command_node(node, env));
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
-	if (saved_stdin == -1 || saved_stdout == -1)
+	env->saved_stdin = dup(STDIN_FILENO);
+	env->saved_stdout = dup(STDOUT_FILENO);
+	if (env->saved_stdin == -1 || env->saved_stdout == -1)
 	{
-		close_fd(saved_stdin, saved_stdout);
+		close_fd(env->saved_stdin, env->saved_stdout);
 		return (1);
 	}
 	redirections = node->redirects;
 	if (setup_redirections(redirections, env) != 0)
 	{
-		restore_std_fds(saved_stdin, saved_stdout);
+		restore_std_fds(env->saved_stdin, env->saved_stdout);
 		return (1);
 	}
 	result = execute_command_node(node, env);
@@ -103,7 +101,7 @@ int	execute_command(t_ast_node *node, t_env *env)
 		g_signal_status = result;
 	else if (g_signal_status < 256)
 		g_signal_status = result;
-	restore_std_fds(saved_stdin, saved_stdout);
+	restore_std_fds(env->saved_stdin, env->saved_stdout);
 	return (g_signal_status % 256);
 }
 

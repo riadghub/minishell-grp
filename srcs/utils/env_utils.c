@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:20:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/12 09:54:36 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/13 10:43:35 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ t_env	*init_env(char **envp)
 		env->vars[i] = ft_strdup(envp[i]);
 		i++;
 	}
+	env->saved_stdin = -1;
+	env->saved_stdout = -1;
 	env->ast_cleanup = NULL;
 	env->env_cleanup = NULL;
 	env->vars[count] = NULL;
@@ -52,5 +54,7 @@ void	free_env(t_env *env)
 			free(env->vars[i++]);
 		free(env->vars);
 	}
+	close(env->saved_stdin);
+	close(env->saved_stdout);
 	free(env);
 }

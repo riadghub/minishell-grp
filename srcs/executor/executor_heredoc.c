@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:53:41 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/06/12 10:02:37 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/13 10:37:46 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ static int	heredoc_child_process(int *fd, t_redir *redir, t_env *env)
 		free(line);
 	}
 	close(fd[1]);
+	close(env->saved_stdin);
+	close(env->saved_stdout);
 	cleanup_child_process(env);
 	_exit(0);
 }
