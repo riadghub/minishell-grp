@@ -6,17 +6,24 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:53:41 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/06/13 10:37:46 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/16 11:44:01 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+static void	signal_hdl(int sig)
+{
+	(void)sig;
+	printf("\r> ^C");
+	close(STDIN_FILENO);
+}
+
 static int	heredoc_child_process(int *fd, t_redir *redir, t_env *env)
 {
 	char	*line;
 
-	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, signal_hdl);
 	signal(SIGQUIT, SIG_IGN);
 	close(fd[0]);
 	while (1)
@@ -61,12 +68,6 @@ int	handle_heredoc(t_redir *redir, t_env *env)
 	close(fd[1]);
 	waitpid(pid, &status, 0);
 	sig_handler(SIGUSR1);
-	setup_signals();
-	if ((status & 0x7f) == SIGINT)
-	{
-		close(fd[0]);
-		return (1);
-	}
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
 	return (0);

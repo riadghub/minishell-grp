@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:15:10 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/03 01:40:25 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/16 11:12:25 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,8 @@ int	is_unknown_cmd(t_token *tokens, t_env *env)
 	path = find_path(cmd, env->vars);
 	if (!path)
 	{
-		// Check if it's a path (contains '/' or starts with './')
 		if (ft_strchr(cmd, '/') || ft_strncmp(cmd, "./", 2) == 0)
 		{
-			// Check if file exists but is not executable
 			if (access(cmd, F_OK) == 0)
 			{
 				ft_putstr_fd("minishell: ", 2);
@@ -81,7 +79,6 @@ int	is_unknown_cmd(t_token *tokens, t_env *env)
 		}
 		else
 		{
-			// Regular command not found in PATH
 			ft_putstr_fd("minishell: command not found: ", 2);
 			ft_putendl_fd(cmd, 2);
 			g_signal_status = 127;
