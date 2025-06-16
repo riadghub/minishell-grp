@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:55:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/16 11:12:40 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/16 14:24:46 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ void	minimal_child_process(t_child_data *data, t_env *env)
 	{
 		ft_putstr_fd("minishell: error executing: ", 2);
 		ft_putendl_fd(data->args[0], 2);
-		_exit(126);
+		exit(126);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 18:15:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/12 10:04:48 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/16 14:24:51 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	execute_pipe_child(t_ast_node *node, t_env *env, int *pipefd)
 	execute_ast_child(node->left, env);
 	exit_code = g_signal_status;
 	cleanup_child_process(env);
-	_exit(exit_code);
+	exit(exit_code);
 }
 
 int	execute_pipe_parent(t_ast_node *node, t_env *env, int *pipefd, pid_t pid)

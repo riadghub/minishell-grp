@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:53:41 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/06/16 11:44:01 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/16 14:26:13 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 static void	signal_hdl(int sig)
 {
 	(void)sig;
-	printf("\r> ^C");
+	g_signal_status = -1;
+	printf("\r> ^C\n");
 	close(STDIN_FILENO);
 }
 
@@ -43,7 +44,9 @@ static int	heredoc_child_process(int *fd, t_redir *redir, t_env *env)
 	close(env->saved_stdin);
 	close(env->saved_stdout);
 	cleanup_child_process(env);
-	_exit(0);
+	if (g_signal_status == -1)
+		exit(1);
+	exit(0);
 }
 
 int	handle_heredoc(t_redir *redir, t_env *env)
@@ -70,5 +73,5 @@ int	handle_heredoc(t_redir *redir, t_env *env)
 	sig_handler(SIGUSR1);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
-	return (0);
+	return (status);
 }
